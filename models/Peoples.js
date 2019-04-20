@@ -1,0 +1,58 @@
+const Sequelize = require('sequelize');
+const sequelize = require('../services/database');
+
+class Peoples extends Sequelize.Model {
+  async getByPassport(passport) {
+    const user = await this.findOne({passport});
+    return user;
+  }
+}
+
+Peoples.init({
+  id: {
+    type: Sequelize.BIGINT,
+    primaryKey: true,
+    autoIncrement: true,
+    allowNull: false
+  },
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  lName: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    field: 'l_name',
+  },
+  mName: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    field: 'm_name',
+  },
+  phone: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  passport: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: 'passport'
+  },
+  address: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  deleted: {
+    type: Sequelize.ENUM('0', '1'),
+    allowNull: false,
+    defaultValue: '0',
+  },
+}, {
+  sequelize,
+  modelName: 'peoples',
+  timestamps: false
+});
+
+Peoples.sync();
+
+module.exports = Peoples;
