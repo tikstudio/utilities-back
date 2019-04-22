@@ -3,6 +3,7 @@ const router = express.Router();
 const Peoples = require('../models/Peoples');
 const Users = require('../models/Users');
 const PeoplesController = require('../controllers/PeoplesController');
+const UsersController = require('../controllers/UsersController');
 
 /* GET home page. */
 router.get('/', async (req, res, next) => {
@@ -20,18 +21,12 @@ router.get('/', async (req, res, next) => {
 });
 
 router.post('/signIn', async (req, res, next) => {
+
   try{
-    const {data} = req.body;
-    const people = await Users.getUserType(data);
-
-    people.update({
-      phone: 'test'
-    });
-    people.save();
-
-
+    const user = await UsersController.signIn(req.body)
     res.json({
-      people
+      status: 'ok',
+      user
     });
   }catch(e){
     e.massage = 'user not found'

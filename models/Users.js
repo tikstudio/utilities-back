@@ -8,7 +8,9 @@ class Users extends Sequelize.Model {
             where: {
                 username: data.login,
                 password: data.password
-            }});
+            },
+            attributes: ['type']
+        });
 
          return user;
     }
