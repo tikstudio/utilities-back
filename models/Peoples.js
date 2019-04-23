@@ -2,8 +2,12 @@ const Sequelize = require('sequelize');
 const sequelize = require('../services/database');
 
 class Peoples extends Sequelize.Model {
-  async getByPassport(passport) {
-    const user = await this.findOne({passport});
+  static async getPeoples(data) {
+    const where = {}
+    for(let key in data){
+      data[key] ? where[key] = data[key] : null
+    }
+    const user = await this.findOne({where});
     return user;
   }
 }
