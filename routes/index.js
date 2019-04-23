@@ -39,6 +39,25 @@ router.post('/signIn', async (req, res, next) => {
 });
 
 
+router.post('/getPeoples', async (req, res, next) => {
+
+  try{
+    const user = await PeoplesController.getPeoples(req.body)
+    res.json({
+      status: 'ok',
+      user
+    });
+  }catch(e){
+    e.massage = 'user not found'
+    res.json({
+      e
+    });
+  }
+
+
+});
+
+
 router.put('/create', async (req, res, next) => {
   const status = await PeoplesController.create(res.body)
   res.json(status);

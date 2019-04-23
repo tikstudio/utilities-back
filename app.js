@@ -7,6 +7,7 @@ const allowOrigin = require('./middleware/allowOrigin');
 
 const indexRouter = require('./routes/index');
 
+
 const app = express();
 
 app.use(allowOrigin);
