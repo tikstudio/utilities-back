@@ -28,10 +28,17 @@ router.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const people = await models.Peoples.findByPk(id);
-    res.json({
-      status: 'ok',
-      people,
-    })
+    if(people){
+      res.json({
+        status: 'ok',
+        people,
+      })
+    }else{
+      res.status(404).json({
+        status: 'not_found',
+      })
+    }
+
   } catch (e) {
     next(e)
   }
