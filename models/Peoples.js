@@ -4,10 +4,10 @@ const sequelize = require('../services/database');
 class Peoples extends Sequelize.Model {
   static async getPeoples(data) {
     const where = {}
-    for(let key in data){
+    for (let key in data) {
       data[key] ? where[key] = data[key] : null
     }
-    const user = await this.findOne({where});
+    const user = await this.findOne({ where });
     return user;
   }
 }
@@ -23,15 +23,13 @@ Peoples.init({
     type: Sequelize.STRING,
     allowNull: false
   },
-  lName: {
+  l_name: {
     type: Sequelize.STRING,
     allowNull: false,
-    field: 'l_name',
   },
-  mName: {
+  m_name: {
     type: Sequelize.STRING,
     allowNull: false,
-    field: 'm_name',
   },
   phone: {
     type: Sequelize.STRING,
@@ -40,7 +38,7 @@ Peoples.init({
   passport: {
     type: Sequelize.STRING,
     allowNull: false,
-    unique: 'passport'
+    unique: 'passport',
   },
   address: {
     type: Sequelize.STRING,

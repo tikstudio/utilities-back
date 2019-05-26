@@ -6,4 +6,5 @@ module.exports = {
     password: 'root',
     database: 'utilities'
   },
+  jwtSecret: '01--5152asdsa1d2sa1d5sa'
 };
