@@ -10,24 +10,27 @@ router.post('/login', async (req, res, next) => {
   try {
 
     const { username, password } = req.body;
-    const user = await models.Users.findOne({
-      where: {
-        username,
-        password: md5(password)
+    if (username && password) {
+      const user = await models.Users.findOne({
+        where: {
+          username: username,
+          password: md5(password)
+        }
+      });
+      if (user) {
+        const token = jwt.sign({ userId: user.id }, jwtSecret);
+        return res.send({
+          status: 'ok',
+          token: token,
+          user,
+        })
       }
-    });
-    if (user) {
-      const token = jwt.sign({ userId: user.id }, jwtSecret);
-      res.send({
-        status: 'ok',
-        token: token,
-        user,
-      })
-    } else {
-      res.status(401).send({
-        status: 'error',
-      })
     }
+
+    res.status(401).send({
+      status: 'error',
+      message: 'Invalid username or password'
+    })
   } catch (e) {
     next(e)
   }
