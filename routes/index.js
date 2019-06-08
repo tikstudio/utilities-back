@@ -1,8 +1,8 @@
 module.exports = {
-  calculators: require('./calculators'),
-  peoples: require('./peoples'),
-  users: require('./users'),
-  types: require('./types'),
+    calculators: require('./calculators'),
+    peoples: require('./peoples'),
+    users: require('./users'),
+    types: require('./types'),
 };
 
 

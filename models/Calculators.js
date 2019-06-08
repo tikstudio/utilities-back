@@ -39,11 +39,16 @@ Calculators.init({
     allowNull: false
   },
 
+  price: {
+    type: Sequelize.BIGINT,
+    allowNull: false
+  },
+
   deleted: {
     type: Sequelize.ENUM('0', '1'),
     allowNull: false,
     defaultValue: '0',
-    primaryKey: true,
+    primaryKey: true
 
   },
 }, {

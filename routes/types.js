@@ -6,6 +6,7 @@ const router = express.Router();
 router.get('/', async (req, res, next) => {
   try {
     const types = await models.Types.findAll();
+    console.log(types);
     res.json({
       status: 'ok',
       types,
