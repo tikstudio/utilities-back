@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.post('/login', async (req, res, next) => {
     try {
+        console.log(55555555555555);
         const {username, password} = req.body;
         if (username && password) {
             const user = await models.Users.findOne({
@@ -25,11 +26,6 @@ router.post('/login', async (req, res, next) => {
                 })
             }
 
-
-
-
-
-            
         }
 
         res.status(401).send({
