@@ -12,6 +12,7 @@ function authorization(req, res, next) {
     const token = req.headers['authorization'];
     const decoded = jwt.verify(token, jwtSecret);
     req.userId = decoded.userId;
+    req.userRole = decoded.userRole;
   }
   next();
 }
