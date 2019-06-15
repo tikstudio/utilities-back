@@ -188,7 +188,7 @@ router.post('/search', async (req, res, next) => {
         include: [models.Region]
       }
     );
-
+    console.log(people);
     res.json({
       status: 'ok',
       people
@@ -196,6 +196,8 @@ router.post('/search', async (req, res, next) => {
   } catch (e) {
     next(e)
   }
+
+
 });
 
 module.exports = router;

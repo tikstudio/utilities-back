@@ -5,64 +5,79 @@ const Types = require('./Types');
 
 
 class Calculators extends Sequelize.Model {
-
+  // static async getCalculators(price) {
+  //   const where = {};
+  //   for (let key in price) {
+  //     models.Utilities.pay_date
+  //   }
+  //   }
+  //
+  // const allPugs = await Pug.findAll({
+  //   attributes: ['id', 'name', 'age'] // like saying: SELECT id, name, age from pugs;
+  // })
 }
 
 Calculators.init({
-  id: {
-    type: Sequelize.BIGINT,
-    primaryKey: true,
-    autoIncrement: true,
-    allowNull: false
-  },
+        id: {
+            type: Sequelize.BIGINT,
+            primaryKey: true,
+            autoIncrement: true,
+            allowNull: false
+        },
 
-  type_id: {
-    type: Sequelize.BIGINT,
-    allowNull: false
-  },
+        type_id: {
+            type: Sequelize.BIGINT,
+            allowNull: false
+        },
 
-  serial_number: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      notEmpty: {
-        msg: "Serial Number is Required"
-      },
-      is: {
-        msg: "No Valid serial Number",
-        args: /^[a-z0-9]+$/i,
-      },
+        serial_number: {
+            type: Sequelize.STRING,
+            allowNull: false,
+            validate: {
+                notEmpty: {
+                    msg: "Serial Number is Required"
+                },
+                is: {
+                    msg: "No Valid serial Number",
+                    args: /^[a-z0-9]+$/i,
+                },
+            }
+        },
+
+        address: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+
+        // price: {
+        //   type: Sequelize.BIGINT,
+        //   allowNull: false
+        // },
+
+        deleted: {
+            type: Sequelize.ENUM('0', '1'),
+            allowNull: false,
+            defaultValue: '0',
+            primaryKey: true
+        },
+    },
+    {
+        sequelize,
+        modelName: 'calculators',
+        timestamps: false
     }
-  },
-  address: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-
-  price: {
-    type: Sequelize.BIGINT,
-    allowNull: false
-  },
-
-  deleted: {
-    type: Sequelize.ENUM('0', '1'),
-    allowNull: false,
-    defaultValue: '0',
-    primaryKey: true
-
-  },
-}, {
-  sequelize,
-  modelName: 'calculators',
-  timestamps: false
-});
+);
 
 Calculators.belongsTo(Peoples, {
-  foreignKey: 'people_id',
+    foreignKey: 'people_id',
 });
 
+// Calculators.belongsTo(Utilities, {
+//     foreignKey: 'calc_id',
+// });
+
 Calculators.belongsTo(Types, {
-  foreignKey: 'type_id',
+    foreignKey: 'type_id',
 });
 
 Calculators.sync();

@@ -4,4 +4,5 @@ module.exports = {
   Types: require('./Types'),
   Users: require('./Users'),
   Region: require('./Region'),
+  Utilities: require('./Utilities'),
 };
