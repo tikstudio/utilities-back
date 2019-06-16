@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../services/database');
 const md5 = require('md5');
-const Region = require('./Region');
+const Types = require('./Types');
 
 class Users extends Sequelize.Model {
 
@@ -53,10 +53,6 @@ Users.init({
         field: 'people_id',
         key: 'people_id',
     },
-    type: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
 
     role: {
         type: Sequelize.ENUM('admin', 'manager', 'payer'),
@@ -69,6 +65,12 @@ Users.init({
     modelName: 'users',
     timestamps: false
 });
+
+
+Users.belongsTo(Types, {
+    foreignKey: 'type_id',
+});
+
 
 Users.sync();
 

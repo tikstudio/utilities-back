@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../services/database');
 const Region = require('./Region');
+const Users = require('./Users');
 
 class Peoples extends Sequelize.Model {
     static async getPeoples(data) {
@@ -62,6 +63,10 @@ Peoples.sync();
 
 Peoples.belongsTo(Region, {
     foreignKey: 'region_id',
+});
+
+Peoples.hasOne(Users, {
+    foreignKey: 'people_id',
 });
 
 module.exports = Peoples;

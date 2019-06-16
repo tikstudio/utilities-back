@@ -1,7 +1,7 @@
 const express = require('express');
 const models = require('../models');
 const router = express.Router();
-
+const Sequelize = require('sequelize');
 const LIMIT = 20;
 
 router.get('/', async (req, res, next) => {
@@ -24,16 +24,18 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+
+
 router.get('/:id', async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const {id} = req.params;
     const people = await models.Peoples.findByPk(id);
-    if(people){
+    if (people) {
       res.json({
         status: 'ok',
         people,
       })
-    }else{
+    } else {
       res.status(404).json({
         status: 'not_found',
       })
@@ -94,7 +96,7 @@ router.post('/', async (req, res, next) => {
       passport,
       region_id,
       address,
-    }, { where: { id } });
+    }, {where: {id}});
     res.json({
       status: 'ok',
       peoples: {
@@ -115,8 +117,12 @@ router.post('/', async (req, res, next) => {
 
 router.delete('/', async (req, res, next) => {
   try {
-    const { id } = req.body;
-    await models.Peoples.destroy({ where: { id } });
+    const paramId = req.param('id');
+    await models.Peoples.destroy({
+      where: {
+        "id": paramId
+      }
+    });
     res.json({
       status: 'ok',
     })
@@ -125,21 +131,75 @@ router.delete('/', async (req, res, next) => {
   }
 });
 
-router.get('/search', async (req, res, next) => {
+router.post('/search', async (req, res, next) => {
+  const Op = Sequelize.Op;
+  console.log(req.userRole);
+  const search = req.param('search');
+
   try {
-    const { s } = req.query;
-    //todo
+    const people = await models.Peoples.findAll(
+      {
+        where:
+          {
+            [Op.or]:
+              [
+                {
+                  'name':
+                    {
+                      [Op.like]: '%' + search + '%',
+                    },
+                },
+                {
+                  'l_name':
+                    {
+                      [Op.like]: '%' + search + '%',
+                    }
+                },
+                {
+                  'm_name':
+                    {
+                      [Op.like]: '%' + search + '%',
+                    }
+                },
+                {
+                  'phone':
+                    {
+                      [Op.like]: '%' + search + '%',
+                    }
+                },
+                {
+                  'passport':
+                    {
+                      [Op.like]: '%' + search + '%',
+                    }
+                },
+                {
+                  'region_id':
+                    {
+                      [Op.like]: '%' + search + '%',
+                    }
+                },
+                {
+                  'address':
+                    {
+                      [Op.like]: '%' + search + '%',
+                    }
+                }
+              ]
+          },
+        include: [models.Region]
+      }
+    );
+    console.log(people);
     res.json({
       status: 'ok',
+      people
     })
   } catch (e) {
     next(e)
   }
+
+
 });
-
-
-
-
 
 module.exports = router;
-
