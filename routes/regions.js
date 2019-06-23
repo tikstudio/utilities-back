@@ -1,13 +1,15 @@
 const Sequelize = require('sequelize');
 const models = require('../models');
+const express = require('express');
+
+const router = express.Router();
 
 
 router.get('/', async (req, res, next) => {
   try {
 
-    const regions = models.Region.findAll({
 
-    })
+    const regions = await models.Region.findAll();
     res.json({
       status: 'ok',
       regions,
@@ -17,3 +19,5 @@ router.get('/', async (req, res, next) => {
 
   }
 });
+
+module.exports = router;

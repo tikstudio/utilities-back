@@ -6,6 +6,8 @@ const Types = require('./Types');
 
 class Calculators extends Sequelize.Model {
 
+
+
 }
 
 Calculators.init({

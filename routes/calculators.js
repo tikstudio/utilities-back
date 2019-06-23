@@ -6,7 +6,16 @@ const Sequelize = require('sequelize');
 
 const LIMIT = 20;
 
+
 router.get('/', async (req, res, next) => {
+  // if (req.userRole != "admin" || req.userRole != "payer") {
+  //   return
+  //   res.json({
+  //     status: 403,
+  //     "massige": "Access Denied"
+  //   })
+  // }
+  console.log(req.userRole,111111111);
   try {
     const page = req.query.page || 1;
     const calculators = await models.Calculators.findAll({
@@ -177,43 +186,49 @@ router.post('/search', async (req, res, next) => {
 router.put('/add', async (req, res, next) => {
   try {
     const {number, serial_number} = req.body;
+
     //todo get calculator type
 
     const calc = await models.Calculators.findOne({
       where: {
-        serial_number
+        serial_number,
       },
       include: [models.Types]
     });
 
     const dataOld = await models.Utilities.findOne({
       where: {
-        calc_id: calc.id
+        calc_id: calc.id,
+
       },
       order: [
         ['create_date', 'DESC'],
       ],
     });
-    let debt;
 
+    let debt;
     if (dataOld) {
-      const numberDif = dataOld.number - number;
-      debt = (calc.type.price * numberDif) + dataOld.debt;
+      const numberDif = number - dataOld.number;
+      debt = (calc.type.price * numberDif);
+      debt += dataOld.debt
     } else {
       debt = calc.type.price * number
     }
+
 
     const utilities = await models.Utilities.create(
       {
         "calc_id": calc.id,
         "number": number,
         "debt": debt,
+        "create_date": new Date().toISOString(),
         "pay_date": null,
         "paid_price": 0,
         "create_user_id": req.userId,
         "payed_user_id": null,
       }
     );
+
 
     res.json({
       status: 'ok',
@@ -223,9 +238,65 @@ router.put('/add', async (req, res, next) => {
     next(e)
   }
 
+});
+
+
+router.put('/payer', async (req, res, next) => {
+  try {
+    const Op = Sequelize.Op;
+    const search = req.param('search');
+    const {paid_price} = req.body;
+
+    const calculators = await models.Calculators.findOne(
+      {
+        where:
+          {
+            [Op.or]:
+              [
+                {
+                  'serial_number':
+                    {
+                      [Op.like]: '%' + search + '%',
+                    }
+                },
+
+              ]
+          },
+      }
+    );
+
+    const utilities = await models.Utilities.findOne(
+      {
+        where: {
+
+          'calc_id': calculators.id
+
+        }
+      }
+    );
+
+    const debt = utilities.debt - paid_price;
+
+    const utilities_update = await models.Utilities.update({
+        debt,
+        paid_price,
+        "pay_date": new Date().toISOString(),
+
+      },
+      {where: {"calc_id": calculators.id}});
+
+    res.json({
+      status: 'ok',
+      calculators
+    })
+
+  } catch (e) {
+    next(e)
+
+  }
+
 
 });
 
 
 module.exports = router;
-

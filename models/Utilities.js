@@ -26,7 +26,10 @@ Utilities.init({
   },
   pay_date: {
     type: Sequelize.STRING,
+    //   type: Sequelize.DATE,
     allowNull: true,
+      // defaultValue: Sequelize.NOW,
+      // isDate: true,
   },
   paid_price: {
     type: Sequelize.BIGINT,
