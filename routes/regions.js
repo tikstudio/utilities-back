@@ -1,24 +1,23 @@
-const express = require('express');
+const Sequelize = require('sequelize');
 const models = require('../models');
+const express = require('express');
+
+const router = express.Router();
 
 
 router.get('/', async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const region = await models.Region.findByPk(id);
-        if(region){
-            res.json({
-                status: 'ok',
-                region,
-            })
-        }else{
-            res.status(404).json({
-                status: 'not_region',
-            })
-        }
+  try {
 
-    } catch (e) {
-        next(e)
-    }
 
+    const regions = await models.Region.findAll();
+    res.json({
+      status: 'ok',
+      regions,
+    })
+  } catch (e) {
+    next(e)
+
+  }
 });
+
+module.exports = router;

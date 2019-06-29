@@ -3,6 +3,8 @@ module.exports = {
     peoples: require('./peoples'),
     users: require('./users'),
     types: require('./types'),
+    regions: require('./regions'),
+
 };
 
 
