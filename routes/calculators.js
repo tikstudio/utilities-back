@@ -187,15 +187,13 @@ router.put('/add', async (req, res, next) => {
     try {
         const {number, serial_number} = req.body;
         const calculators = await models.Calculators.findOne({
-            where: {serial_number,},
+            where: {serial_number},
             include: [models.Types]
         });
 
         const dataOld = await models.Utilities.findOne({
             where: {calc_id: calculators.id,},
-            order: [
-                ['create_date', 'DESC'],
-            ],
+            order: [['create_date', 'DESC']],
         });
 
         console.log(dataOld);
@@ -250,13 +248,7 @@ router.put('/payer', async (req, res, next) => {
                     {
                         [Op.or]:
                             [
-                                {
-                                    'serial_number':
-                                        {
-                                            [Op.like]: '%' + serial_number[0] + '%',
-                                        }
-                                },
-
+                                {'serial_number': {[Op.like]: '%' + serial_number[0] + '%',}},
                             ]
                     },
             }

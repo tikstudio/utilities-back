@@ -13,11 +13,7 @@ router.get('/', async (req, res, next) => {
                     offset: LIMIT * page - LIMIT,
                     limit: LIMIT,
                     include:
-                        [
-                        {model: models.Regions},
-                        {model: models.Users},
-                        ],
-                    // include: [{model: models.Users}],
+                        [{model: models.Regions}],
                 }
             );
         const total = await models.Peoples.count();
@@ -34,9 +30,10 @@ router.get('/', async (req, res, next) => {
 });
 
 
-router.get('/:id', async (req, res, next) => {
+router.get('/details', async (req, res, next) => {
     try {
-        const {id} = req.params;
+        const id = req.param('id');
+        console.log(id);
         const people = await models.Peoples.findByPk(id);
 
         if (people === null) {
@@ -45,17 +42,34 @@ router.get('/:id', async (req, res, next) => {
             });
         }
 
-        const calculators = await models.Calculators.findOne({
+        const calculators = await models.Calculators.findAll({
             where: {"people_id": people.id},
-            include: [models.Types]
+            include: [
+                {model: models.Types},
+                {model: models.Utilities},
+                // {
+                //     model: models.Utilities,
+                //     where: 'utilities.calc_id= id'
+                // }
+
+            ]
         });
+
+
+        //
+        // let utilities = await models.Utilities.findAll(
+        //     {
+        //         where: {'calc_id': calculators.id},
+        //         order: [['create_date', 'DESC']],
+        //     }
+        // );
 
         console.log(calculators);
 
         res.json({
             status: 'ok',
             people,
-            calculators
+            calculators,
         });
 
         res.status(404).json({

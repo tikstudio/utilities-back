@@ -2,11 +2,10 @@ const Sequelize = require('sequelize');
 const sequelize = require('../services/database');
 const Peoples = require('./Peoples');
 const Types = require('./Types');
+const Utilities = require('./Utilities');
 
 
 class Calculators extends Sequelize.Model {
-
-
 
 }
 
@@ -27,9 +26,7 @@ Calculators.init({
             type: Sequelize.STRING,
             allowNull: false,
             validate: {
-                notEmpty: {
-                    msg: "Serial Number is Required"
-                },
+                notEmpty: {msg: "Serial Number is Required"},
                 is: {
                     msg: "No Valid serial Number",
                     args: /^[a-z0-9]+$/i,
@@ -66,8 +63,14 @@ Calculators.belongsTo(Peoples, {
 });
 
 // Calculators.belongsTo(Utilities, {
-//     foreignKey: 'calc_id',
+//     foreignKey: 'id',
+//     through:'calc_id'
 // });
+
+Calculators.hasMany(Utilities, {
+    foreignKey: 'calc_id',
+    sourceKey:'id'
+});
 
 Calculators.belongsTo(Types, {
     foreignKey: 'type_id',

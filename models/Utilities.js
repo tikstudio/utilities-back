@@ -51,9 +51,9 @@ Utilities.init({
 });
 
 
-Utilities.belongsTo(Calculators, {
-  foreignKey: 'calc_id',
-});
+// Utilities.belongsTo(Calculators, {
+//   foreignKey: 'calc_id',
+// });
 
 Utilities.sync();
 

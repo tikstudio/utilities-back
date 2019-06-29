@@ -3,6 +3,7 @@ const sequelize = require('../services/database');
 const Regions = require('./Regions');
 const Users = require('./Users');
 // const Calculators = require('./Calculators');
+
 // const Utilities = require('./Utilities');
 
 class Peoples extends Sequelize.Model {
@@ -62,7 +63,6 @@ Peoples.init({
 
 Peoples.sync();
 
-
 Peoples.belongsTo(Regions, {
     foreignKey: 'region_id',
 });
@@ -71,8 +71,10 @@ Peoples.hasOne(Users, {
     foreignKey: 'people_id',
 });
 
-// Peoples.hasOne(Calculators, {
-//     foreignKey: 'payed_user_id',
+// Peoples.hasMany(Calculators, {
+//     foreignKey: 'id',
+//
+//     sourceKey: 'people_id',
 // });
 
 module.exports = Peoples;
