@@ -4,12 +4,12 @@ const express = require('express');
 
 const router = express.Router();
 
-
+////////////+++++++++++++++++
 router.get('/', async (req, res, next) => {
   try {
 
 
-    const regions = await models.Region.findAll();
+    const regions = await models.Regions.findAll();
     res.json({
       status: 'ok',
       regions,

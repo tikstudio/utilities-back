@@ -6,7 +6,7 @@ const Sequelize = require('sequelize');
 
 const LIMIT = 20;
 
-
+////////////++++++++++++++++++++
 router.get('/', async (req, res, next) => {
     // if (req.userRole != "admin" || req.userRole != "payer") {
     //   return
@@ -41,10 +41,10 @@ router.get('/', async (req, res, next) => {
         next(e)
     }
 });
-
-router.get('/:id', async (req, res, next) => {
+/////////////++++++++++++++++++++
+router.get('/details', async (req, res, next) => {
     try {
-        const {id} = req.params;
+        const id = req.param('id');
         const calculator = await models.Calculators.findByPk(id, {
             include: [{
                 model: models.Peoples,
@@ -62,8 +62,7 @@ router.get('/:id', async (req, res, next) => {
         next(e)
     }
 });
-
-
+////////////++++++++++++++++
 router.put('/', async (req, res, next) => {
     try {
         const {
@@ -86,7 +85,7 @@ router.put('/', async (req, res, next) => {
         next(e)
     }
 });
-
+////////////////+++++++++++++++++++
 router.post('/', async (req, res, next) => {
     try {
         const {
@@ -116,7 +115,7 @@ router.post('/', async (req, res, next) => {
         next(e)
     }
 });
-
+///////////++++++++++++++++++++++
 router.delete('/', async (req, res, next) => {
     try {
         const {id} = req.body;
@@ -129,18 +128,20 @@ router.delete('/', async (req, res, next) => {
     }
 });
 
-
+////////////////////Error
 router.post('/search', async (req, res, next) => {
     try {
         const {search} = req.body;
+      console.log(search,555555555555);
         const searchForCategories =
             {
                 $or:
                     [
                         {'serial_number': {$or: '%' + search + '%'}},
                         {'address': {$or: '%' + search + '%'}}
-                    ]
-            };
+                    ],
+
+                };
 
         const peopleData = await models.Utilities.findAll(
             {
@@ -182,7 +183,7 @@ router.post('/search', async (req, res, next) => {
 
 
 });
-
+/////////////++++++++++++++++++++++
 router.put('/add', async (req, res, next) => {
     try {
         const {number, serial_number} = req.body;
@@ -235,7 +236,7 @@ router.put('/add', async (req, res, next) => {
 
 });
 
-
+//////////////////++++++++++++++++++++++
 router.put('/payer', async (req, res, next) => {
     try {
         const Op = Sequelize.Op;

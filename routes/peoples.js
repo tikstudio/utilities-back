@@ -3,7 +3,7 @@ const models = require('../models');
 const router = express.Router();
 const Sequelize = require('sequelize');
 const LIMIT = 20;
-
+//////////////++++++++++++++++++
 router.get('/', async (req, res, next) => {
     try {
         const page = req.query.page || 1;
@@ -29,7 +29,7 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-
+///////////+++++++++++++++
 router.get('/details', async (req, res, next) => {
     try {
         const id = req.param('id');
@@ -81,7 +81,7 @@ router.get('/details', async (req, res, next) => {
     }
 });
 
-
+////////////++++++++++++++++
 router.put('/', async (req, res, next) => {
     try {
         const {
@@ -110,7 +110,7 @@ router.put('/', async (req, res, next) => {
         next(e)
     }
 });
-
+/////////++++++++++++++++
 router.post('/', async (req, res, next) => {
     try {
         const {
@@ -149,7 +149,7 @@ router.post('/', async (req, res, next) => {
         next(e)
     }
 });
-
+///////++++++++++++++
 router.delete('/', async (req, res, next) => {
     try {
         const paramId = req.param('id');
@@ -165,11 +165,12 @@ router.delete('/', async (req, res, next) => {
         next(e)
     }
 });
-
+////////////+++++++++++++++++++++++
 router.post('/search', async (req, res, next) => {
     const Op = Sequelize.Op;
     console.log(req.userRole);
     const search = req.param('search');
+    console.log(search,5555555555555555);
 
     try {
         const people = await models.Peoples.findAll(
@@ -222,7 +223,7 @@ router.post('/search', async (req, res, next) => {
                                 }
                             ]
                     },
-                include: [models.Region]
+                include: [models.Regions]
             }
         );
         console.log(people);
