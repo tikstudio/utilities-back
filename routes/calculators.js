@@ -6,7 +6,7 @@ const Sequelize = require('sequelize');
 
 const LIMIT = 20;
 
-////////////++++++++++++++++++++
+
 router.get('/', async (req, res, next) => {
     // if (req.userRole != "admin" || req.userRole != "payer") {
     //   return
@@ -41,10 +41,10 @@ router.get('/', async (req, res, next) => {
         next(e)
     }
 });
-/////////////++++++++++++++++++++
-router.get('/details', async (req, res, next) => {
+
+router.get('/:id', async (req, res, next) => {
     try {
-        const id = req.param('id');
+        const {id} = req.params;
         const calculator = await models.Calculators.findByPk(id, {
             include: [{
                 model: models.Peoples,
@@ -62,7 +62,8 @@ router.get('/details', async (req, res, next) => {
         next(e)
     }
 });
-////////////++++++++++++++++
+
+
 router.put('/', async (req, res, next) => {
     try {
         const {
@@ -85,7 +86,7 @@ router.put('/', async (req, res, next) => {
         next(e)
     }
 });
-////////////////+++++++++++++++++++
+
 router.post('/', async (req, res, next) => {
     try {
         const {
@@ -115,7 +116,7 @@ router.post('/', async (req, res, next) => {
         next(e)
     }
 });
-///////////++++++++++++++++++++++
+
 router.delete('/', async (req, res, next) => {
     try {
         const {id} = req.body;
@@ -128,54 +129,33 @@ router.delete('/', async (req, res, next) => {
     }
 });
 
-////////////////////Error
+
 router.post('/search', async (req, res, next) => {
+    const Op = Sequelize.Op;
+    console.log(req.userRole);
+    const search = req.param('search');
+
     try {
-        const {search} = req.body;
-      console.log(search,555555555555);
-        const searchForCategories =
-            {
-                $or:
-                    [
-                        {'serial_number': {$or: '%' + search + '%'}},
-                        {'address': {$or: '%' + search + '%'}}
-                    ],
-
-                };
-
-        const peopleData = await models.Utilities.findAll(
-            {
-                include: [
-                    {
-                        model: models.Calculators,
-                        where: searchForCategories,
-
-                        include: [
-                            {model: models.Types},
-                            {
-                                model: models.Peoples,
-                                // where: searchForPeoples,
-
-                                include: [{model: models.Users,}]
-                            },
-                        ],
-                    }
-                ]
-            }
+        const calculators = await models.Calculators.findOne(
+          {
+              where:
+                {
+                    [Op.or]:
+                      [
+                          {
+                              'serial_number':
+                                {
+                                    [Op.like]: '%' + search + '%',
+                                },
+                          }
+                      ]
+                },
+          }
         );
-
-        const calculatorData =
-
-            {
-                "result": []
-            };
-
-        peopleData.push(calculatorData);
-
-        console.log(peopleData);
+        console.log(calculators);
         res.json({
             status: 'ok',
-            peopleData
+            calculators
         })
     } catch (e) {
         next(e)
@@ -183,7 +163,8 @@ router.post('/search', async (req, res, next) => {
 
 
 });
-/////////////++++++++++++++++++++++
+
+
 router.put('/add', async (req, res, next) => {
     try {
         const {number, serial_number} = req.body;
@@ -236,7 +217,7 @@ router.put('/add', async (req, res, next) => {
 
 });
 
-//////////////////++++++++++++++++++++++
+
 router.put('/payer', async (req, res, next) => {
     try {
         const Op = Sequelize.Op;
